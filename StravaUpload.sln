@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StravaUpload.Lib", "StravaUpload.Lib\StravaUpload.Lib.csproj", "{2781DBEE-E0E5-4AE3-B005-3B1694CF7EB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StravaUpload.StravaUploadFunction", "StravaUpload.StravaUploadFunction\StravaUpload.StravaUploadFunction.csproj", "{8B28D2F7-7686-485B-8CBB-BF1B1958FC8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StravaUpload.Console", "StravaUpload.Console\StravaUpload.Console.csproj", "{495C6AA0-114C-4F73-80CB-76371A3243DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2781DBEE-E0E5-4AE3-B005-3B1694CF7EB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2781DBEE-E0E5-4AE3-B005-3B1694CF7EB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2781DBEE-E0E5-4AE3-B005-3B1694CF7EB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2781DBEE-E0E5-4AE3-B005-3B1694CF7EB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B28D2F7-7686-485B-8CBB-BF1B1958FC8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B28D2F7-7686-485B-8CBB-BF1B1958FC8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B28D2F7-7686-485B-8CBB-BF1B1958FC8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B28D2F7-7686-485B-8CBB-BF1B1958FC8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{495C6AA0-114C-4F73-80CB-76371A3243DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{495C6AA0-114C-4F73-80CB-76371A3243DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{495C6AA0-114C-4F73-80CB-76371A3243DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{495C6AA0-114C-4F73-80CB-76371A3243DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A9A6F67C-3E60-4F7D-BAB1-4AFF2FBC15F3}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>© 2018 Marek Polak</Copyright>
+    <PackageLicenseUrl>https://github.com/marazt/strava-upload/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/marazt/strava-upload</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/marazt/strava-upload</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>suunto movescount backup strava upload</PackageTags>
+    <Description>A simple library for backuping moves from Suunto Movescount and uploading them to Strava.</Description>
+    <Authors>Marek Polak</Authors>
+    <PackageId>StravaUpload</PackageId>
+    <Product>StravaUpload</Product>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
+    <PackageReference Include="MovescountBackup" Version="1.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="StravaDotNet" Version="3.5.3" />
+  </ItemGroup>
+</Project>
