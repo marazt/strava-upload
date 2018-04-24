@@ -251,54 +251,61 @@ namespace StravaUpload.Lib
                 }
                 else
                 {
-                    // Create new activity
-                    var activityType = this.MovescountTypeToStravaType(move.ActivityID);
-                    try
+                    if (!File.Exists(gpsFile))
                     {
-                        var uploadStatus =
-                            await this.client.Uploads.UploadActivityAsync(gpsFile, gpsFormat, activityType);
+                        this.logger.LogWarning($"Gps data file {gpsFile} was not found. Activity could not be created.");
+                    }
+                    else
+                    {
+                        // Create new activity
+                        var activityType = this.MovescountTypeToStravaType(move.ActivityID);
+                        try
+                        {
+                            var uploadStatus =
+                                await this.client.Uploads.UploadActivityAsync(gpsFile, gpsFormat, activityType);
 
-                        if (uploadStatus.Error != null)
-                        {
-                            if (uploadStatus.Error.Contains("duplicate of activity."))
+                            if (uploadStatus.Error != null)
                             {
-                                var parts = uploadStatus.Error.Split(' ');
-                                var activityId = parts[parts.Length - 1];
-                                this.logger.LogWarning(
-                                    $"Duplicate activity of MoveId {move.MoveId} and ActivityId {activityId}. File {gpsFile}.");
-                                await this.client.Activities.UpdateActivityAsync(activityId,
-                                    ActivityParameter.Description, description);
-                            }
-                            else if (uploadStatus.Error.Contains("empty"))
-                            {
-                                this.logger.LogWarning(
-                                    $"Empty GPS file {gpsFile} of MoveId {move.MoveId}. Trying to create new activity.");
-                                await this.client.Activities.CreateActivityAsync(name, activityType,
-                                    moveStartTime.Value, (int)move.Duration, description,
-                                    move.Distance ?? 0);
-                            }
-                        }
-                        else
-                        {
-                            this.logger.LogWarning($"New activity of MoveId {move.MoveId} and file {gpsFile} created.");
-                            if (uploadStatus.Id == 0)
-                            {
-                                this.logger.LogWarning($"Invalid upload status of uploaded move {move.MoveId}.");
+                                if (uploadStatus.Error.ToLower().Contains("duplicate of activity"))
+                                {
+                                    var parts = uploadStatus.Error.Split(' ');
+                                    var activityId = parts[parts.Length - 1];
+                                    this.logger.LogWarning(
+                                        $"Duplicate activity of MoveId {move.MoveId} and ActivityId {activityId}. File {gpsFile}.");
+                                    await this.client.Activities.UpdateActivityAsync(activityId,
+                                        ActivityParameter.Description, description);
+                                }
+                                else if (uploadStatus.Error.Contains("empty"))
+                                {
+                                    this.logger.LogWarning(
+                                        $"Empty GPS file {gpsFile} of MoveId {move.MoveId}. Trying to create new activity.");
+                                    await this.client.Activities.CreateActivityAsync(name, activityType,
+                                        moveStartTime.Value, (int)move.Duration, description,
+                                        move.Distance ?? 0);
+                                }
                             }
                             else
                             {
-                                this.logger.LogWarning(
-                                    $"Saving upload status id {uploadStatus.Id} for description update.");
-                                uploadedActivitiesToUpdate.Add(uploadStatus.Id, description);
+                                this.logger.LogWarning($"New activity of MoveId {move.MoveId} and file {gpsFile} created.");
+                                if (uploadStatus.Id == 0)
+                                {
+                                    this.logger.LogWarning($"Invalid upload status of uploaded move {move.MoveId}.");
+                                }
+                                else
+                                {
+                                    this.logger.LogWarning(
+                                        $"Saving upload status id {uploadStatus.Id} for description update.");
+                                    uploadedActivitiesToUpdate.Add(uploadStatus.Id, description);
+                                }
                             }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        this.logger.LogError("Error while creating activity.");
-                        this.logger.LogError(ex.Message);
-                        this.logger.LogError(ex.StackTrace);
-                        throw;
+                        catch (Exception ex)
+                        {
+                            this.logger.LogError("Error while creating activity.");
+                            this.logger.LogError(ex.Message);
+                            this.logger.LogError(ex.StackTrace);
+                            throw;
+                        }
                     }
                 }
             }

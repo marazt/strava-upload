@@ -19,7 +19,7 @@ namespace StravaUpload.StravaUploadFunction
         [FunctionName("StravaUploadFunction")]
         // ReSharper disable once UnusedParameter.Global
         // ReSharper disable once UnusedMember.Global
-        public static async Task Run([TimerTrigger("0 0 3 * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo myTimer, TraceWriter log, ExecutionContext context)
+        public static async Task Run([TimerTrigger("0 0 3 * * *", RunOnStartup = false, UseMonitor = true)] TimerInfo myTimer, TraceWriter log, ExecutionContext context)
         {
             log.Info($"C# Timer trigger MovescountBackup function executed at: {DateTime.UtcNow.ToIsoString()}.");
             await Execute(log, context);
@@ -43,19 +43,22 @@ namespace StravaUpload.StravaUploadFunction
                 var moves = await downloader.DownloadLastUserMoves(configuration.MovescountMemberName);
 
                 var uploader = new Uploader(configuration.StravaAccessToken, new TraceWriterLogger<Uploader>(log));
-
+             
                 const DataFormat fileFormat = DataFormat.Tcx;
                 movesData = moves.Select(move => (move,
-                                 filePath: Path.Combine(configuration.BackupDir, move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat)),
-                                 fileFormat)).ToList();
+                                 filePath: Path.Combine(context.FunctionAppDirectory, configuration.BackupDir, move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat)),
+                                 fileFormat))
+                                 .ToList();
 
                 // Load data from Cloud storage and store them locally
                 foreach (var moveItem in movesData)
                 {
-                    Directory.CreateDirectory(Path.Combine(configuration.BackupDir, moveItem.move.MoveId.ToString()));
+                    Directory.CreateDirectory(Path.Combine(context.FunctionAppDirectory, configuration.BackupDir, moveItem.move.MoveId.ToString()));
+                    var blobStorageFilePath = Path.Combine(configuration.BackupDir, moveItem.move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat));
                     if (!File.Exists(moveItem.filePath))
                     {
-                        File.WriteAllText(moveItem.filePath, await storage.LoadData(moveItem.filePath));
+                        log.Info($"Storing gps data file in {moveItem.filePath}.");
+                        File.WriteAllText(moveItem.filePath, await storage.LoadData(blobStorageFilePath));
                     }
                 }
 
@@ -89,7 +92,7 @@ namespace StravaUpload.StravaUploadFunction
             finally
             {
                 // Clean backup directory
-                Directory.Delete(configuration.BackupDir, true);
+                Directory.Delete(Path.Combine(context.FunctionAppDirectory, configuration.BackupDir), true);
             }
         }
 

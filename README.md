@@ -5,12 +5,12 @@ are provided by [**MovescountBackup** library](https://github.com/marazt/movesco
  
 ## Version
 
-- **Version 1.0.0** - 2018-03-15
+- **Version 1.0.1** - 2018-04-24
 
 ### Getting Started/Installing
 
 ```ps
-PM> Install-Package StravaUpload -Version 1.0.0
+PM> Install-Package StravaUpload -Version 1.0.1
 ```
 
 ## Project Description
