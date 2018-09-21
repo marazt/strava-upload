@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MovescountBackup.Lib.Dto;
 using MovescountBackup.Lib.Enums;
 using MovescountBackup.Lib.Services;
@@ -15,6 +8,13 @@ using Strava.Authentication;
 using Strava.Clients;
 using Strava.Upload;
 using StravaUpload.Lib.Dto;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace StravaUpload.Lib
 {
@@ -179,7 +179,7 @@ namespace StravaUpload.Lib
             notes.AppendLine(
                 $"RecoveryTime: {(move.RecoveryTime.HasValue ? $"{Math.Round(move.RecoveryTime.Value / 3600, 1)}h" : "-")}");
 
-            return $"{move.Notes}\n{notes}";
+            return $"{move.Notes?.Replace(" + ", " plus ")}\n{notes}";
         }
 
         public async Task AddOrUpdateMovescountMovesToStravaActivities(
@@ -228,7 +228,7 @@ namespace StravaUpload.Lib
 
                 var key = new RangePair(moveStartTime.Value, moveStartTime.Value);
                 var description = CreateDescription(move);
-                var name = move.ActivityID.ToString();
+                var name = move.Notes != null ? move.Notes.Split('.').FirstOrDefault() ?? move.ActivityID.ToString() : move.ActivityID.ToString();
 
                 if (activitiesToUpdate.ContainsKey(key))
                 {
@@ -274,6 +274,8 @@ namespace StravaUpload.Lib
                                         $"Duplicate activity of MoveId {move.MoveId} and ActivityId {activityId}. File {gpsFile}.");
                                     await this.client.Activities.UpdateActivityAsync(activityId,
                                         ActivityParameter.Description, description);
+                                    await this.client.Activities.UpdateActivityAsync(activityId,
+                                        ActivityParameter.Name, name);
                                 }
                                 else if (uploadStatus.Error.Contains("empty"))
                                 {

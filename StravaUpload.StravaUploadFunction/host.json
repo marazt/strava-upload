@@ -1,3 +1,24 @@
 {
-  "debug": true
+  "version": "2.0",
+  "watchDirectories": [],
+  "healthMonitor": {
+    "enabled": true,
+    "healthCheckInterval": "00:01:00",
+    "healthCheckWindow": "00:02:00",
+    "healthCheckThreshold": 6,
+    "counterThreshold": 0.80
+  },
+  "functionTimeout": "00:05:00",
+  "logging": {
+    "fileLoggingMode": "debugOnly"
+  },
+  "extensions": {
+    "cosmosDB": {},
+    "eventHubs": {},
+    "http": {},
+    "queues": {},
+    "sendGrid": {},
+    "serviceBus": {},
+    "durableTask": {}
+  }
 }

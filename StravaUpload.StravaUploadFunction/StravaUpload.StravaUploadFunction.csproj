@@ -4,8 +4,8 @@
     <AzureFunctionsVersion>v2</AzureFunctionsVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.6" />
-    <PackageReference Include="Sendgrid" Version="9.9.0" />
+    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="1.0.21" />
+    <PackageReference Include="Sendgrid" Version="9.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StravaUpload.Lib\StravaUpload.Lib.csproj" />
@@ -18,5 +18,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@ namespace StravaUpload.StravaUploadFunction
         [FunctionName("StravaUploadFunction")]
         // ReSharper disable once UnusedParameter.Global
         // ReSharper disable once UnusedMember.Global
-        public static async Task Run([TimerTrigger("0 0 3 * * *", RunOnStartup = false, UseMonitor = true)] TimerInfo myTimer, TraceWriter log, ExecutionContext context)
+        public static async Task Run([TimerTrigger("0 0 3 * * *", RunOnStartup = true, UseMonitor = true)] TimerInfo myTimer, TraceWriter log, ExecutionContext context)
         {
             log.Info($"C# Timer trigger MovescountBackup function executed at: {DateTime.UtcNow.ToIsoString()}.");
             await Execute(log, context);
@@ -29,6 +29,12 @@ namespace StravaUpload.StravaUploadFunction
         {
             log.Info("Running.");
             var configuration = SetupConfiguration(context);
+            var backupFullPath = Path.Combine(context.FunctionAppDirectory, configuration.BackupDir);
+            if (!Directory.Exists(backupFullPath))
+            {
+                Directory.CreateDirectory(backupFullPath);
+            }
+
             var mailService = new MailService(configuration);
 
             var client = new Client(configuration, new TraceWriterLogger<Client>(log));
@@ -46,14 +52,14 @@ namespace StravaUpload.StravaUploadFunction
              
                 const DataFormat fileFormat = DataFormat.Tcx;
                 movesData = moves.Select(move => (move,
-                                 filePath: Path.Combine(context.FunctionAppDirectory, configuration.BackupDir, move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat)),
+                                 filePath: Path.Combine(backupFullPath, move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat)),
                                  fileFormat))
                                  .ToList();
 
                 // Load data from Cloud storage and store them locally
                 foreach (var moveItem in movesData)
                 {
-                    Directory.CreateDirectory(Path.Combine(context.FunctionAppDirectory, configuration.BackupDir, moveItem.move.MoveId.ToString()));
+                    Directory.CreateDirectory(Path.Combine(backupFullPath, moveItem.move.MoveId.ToString()));
                     var blobStorageFilePath = Path.Combine(configuration.BackupDir, moveItem.move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat));
                     if (!File.Exists(moveItem.filePath))
                     {
