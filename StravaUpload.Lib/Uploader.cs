@@ -228,7 +228,7 @@ namespace StravaUpload.Lib
 
                 var key = new RangePair(moveStartTime.Value, moveStartTime.Value);
                 var description = CreateDescription(move);
-                var name = move.Notes != null ? move.Notes.Split('.').FirstOrDefault() ?? move.ActivityID.ToString() : move.ActivityID.ToString();
+                var name = move.Notes != null ? move.Notes.Split('.').FirstOrDefault() ?? move.MoveID.ToString() : move.MoveID.ToString();
 
                 if (activitiesToUpdate.ContainsKey(key))
                 {
