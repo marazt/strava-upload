@@ -98,7 +98,7 @@ namespace StravaUpload.StravaUploadFunction
             finally
             {
                 // Clean backup directory
-                Directory.Delete(Path.Combine(context.FunctionAppDirectory, configuration.BackupDir), true);
+                Directory.Delete(backupFullPath, true);
             }
         }
 

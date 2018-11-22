@@ -3,7 +3,7 @@
 namespace StravaUpload.Console
 {
 
-    public class Configuration : MovescountBackup.Lib.IConfiguration, Lib.IConfiguration
+    public class Configuration : IConfiguration
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IConfigurationRoot root;
@@ -23,6 +23,9 @@ namespace StravaUpload.Console
             this.StorageConnectionString = this.root["AppConfig:StorageConnectionString"];
             this.ContainerName = this.root["AppConfig:ContainerName"];
             this.StravaAccessToken = this.root["AppConfig:StravaAccessToken"];
+            this.SendGridApiKey = this.root["AppConfig:SendGridApiKey"];
+            this.EmailFrom = this.root["AppConfig:EmailFrom"];
+            this.EmailTo = this.root["AppConfig:EmailTo"];
         }
 
         public string MovescountAppKey { get; set; }
@@ -42,5 +45,12 @@ namespace StravaUpload.Console
         public string ContainerName { get; set; }
 
         public string StravaAccessToken { get; set; }
+
+        public string SendGridApiKey { get; set; }
+
+        public string EmailFrom { get; set; }
+
+        public string EmailTo { get; set; }
+
     }
 }
