@@ -2,13 +2,14 @@
 
 namespace StravaUpload.StravaUploadFunction
 {
-
     public class Configuration : IConfiguration
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IConfigurationRoot root;
 
-        public Configuration() { }
+        public Configuration()
+        {
+        }
 
         public Configuration(IConfigurationRoot root)
         {

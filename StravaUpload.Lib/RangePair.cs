@@ -23,7 +23,7 @@ namespace StravaUpload.Lib
             return false;
         }
 
-        private string FormateDate (DateTime date) => date.ToString("yyyy-MM-ddTHH:mmZ");
+        private string FormateDate(DateTime date) => date.ToString("yyyy-MM-ddTHH:mmZ");
 
         private bool AreDatesSame(DateTime dt1, DateTime dt2) => dt1.Date == dt2.Date && dt1.Hour == dt2.Hour && dt1.Minute == dt2.Minute;
 

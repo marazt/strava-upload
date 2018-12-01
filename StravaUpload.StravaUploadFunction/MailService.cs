@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using SendGrid;
+﻿using SendGrid;
 using SendGrid.Helpers.Mail;
-using StravaUpload.Lib;
+using System.Threading.Tasks;
 
 namespace StravaUpload.StravaUploadFunction
 {

@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Logging;
 
 namespace StravaUpload.Console
 {

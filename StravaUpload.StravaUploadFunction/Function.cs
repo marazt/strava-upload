@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +5,11 @@ using MovescountBackup.Lib.Dto;
 using MovescountBackup.Lib.Services;
 using Strava.Upload;
 using StravaUpload.Lib;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace StravaUpload.StravaUploadFunction
 {
@@ -25,6 +25,7 @@ namespace StravaUpload.StravaUploadFunction
             await Execute(log, context);
             log.Info($"Done at: {DateTime.UtcNow.ToIsoString()}.");
         }
+
         private static async Task Execute(TraceWriter log, ExecutionContext context)
         {
             log.Info("Running.");
@@ -48,11 +49,11 @@ namespace StravaUpload.StravaUploadFunction
                 log.Info("Trying to backup new Movescount moves and upload them to Strava.");
                 var moves = await downloader.DownloadLastUserMoves(configuration.MovescountMemberName);
 
-                var uploader = new Uploader(configuration.StravaAccessToken, new TraceWriterLogger<Uploader>(log));
-             
+                var uploader = new MovescountUploader(configuration.StravaAccessToken, new TraceWriterLogger<MovescountUploader>(log));
+
                 const DataFormat fileFormat = DataFormat.Tcx;
                 movesData = moves.Select(move => (move,
-                                 filePath: Path.Combine(backupFullPath, move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat)),
+                                 filePath: Path.Combine(backupFullPath, move.MoveId.ToString(), MovescountUploader.CreateGpsFileMapName(fileFormat)),
                                  fileFormat))
                                  .ToList();
 
@@ -60,7 +61,7 @@ namespace StravaUpload.StravaUploadFunction
                 foreach (var moveItem in movesData)
                 {
                     Directory.CreateDirectory(Path.Combine(backupFullPath, moveItem.move.MoveId.ToString()));
-                    var blobStorageFilePath = Path.Combine(configuration.BackupDir, moveItem.move.MoveId.ToString(), Uploader.CreateGpsFileMapName(fileFormat));
+                    var blobStorageFilePath = Path.Combine(configuration.BackupDir, moveItem.move.MoveId.ToString(), MovescountUploader.CreateGpsFileMapName(fileFormat));
                     if (!File.Exists(moveItem.filePath))
                     {
                         log.Info($"Storing gps data file in {moveItem.filePath}.");

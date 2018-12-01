@@ -17,7 +17,7 @@ namespace StravaUpload.Lib.Dto
 
         [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        
+
         [JsonProperty(PropertyName = "type")]
         [JsonConverter(typeof(StringEnumConverter))]
         public ActivityType Type { get; set; }

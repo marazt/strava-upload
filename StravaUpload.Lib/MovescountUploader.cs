@@ -18,13 +18,13 @@ using System.Threading.Tasks;
 
 namespace StravaUpload.Lib
 {
-    public class Uploader
+    public class MovescountUploader
     {
         private readonly StravaClient client;
         private readonly string accessToken;
         private readonly ILogger logger;
 
-        public Uploader(string accessToken, ILogger<Uploader> logger)
+        public MovescountUploader(string accessToken, ILogger<MovescountUploader> logger)
         {
             this.accessToken = accessToken;
             this.logger = logger;
@@ -37,38 +37,54 @@ namespace StravaUpload.Lib
             {
                 case ActivityIdEnum.CircuitTraining:
                     return ActivityType.Crossfit;
+
                 case ActivityIdEnum.Climbing:
                     return ActivityType.Hike;
+
                 case ActivityIdEnum.CrossFit:
                     return ActivityType.Crossfit;
+
                 case ActivityIdEnum.Cycling:
                     return ActivityType.Ride;
+
                 case ActivityIdEnum.MultiSport:
                     return ActivityType.Run;
+
                 case ActivityIdEnum.NotSpecifiedSport:
                     return ActivityType.Workout;
+
                 case ActivityIdEnum.Run:
                     return ActivityType.Run;
+
                 case ActivityIdEnum.Walking:
                     return ActivityType.Walk;
+
                 case ActivityIdEnum.NordicWalking:
                 case ActivityIdEnum.Trekking:
                     return ActivityType.Hike;
+
                 case ActivityIdEnum.Swimming:
                 case ActivityIdEnum.OpenWaterSwimming:
                     return ActivityType.Swim;
+
                 case ActivityIdEnum.Skating:
                     return ActivityType.InlineSkate;
+
                 case ActivityIdEnum.IceSkating:
                     return ActivityType.Iceskate;
+
                 case ActivityIdEnum.CrosscountrySkiing:
                     return ActivityType.CrossCountrySkiing;
+
                 case ActivityIdEnum.AlpineSkiing:
                     return ActivityType.AlpineSki;
+
                 case ActivityIdEnum.IndoorTraining:
                     return ActivityType.Crossfit;
+
                 case ActivityIdEnum.TrailRunning:
                     return ActivityType.Run;
+
                 default:
                     return ActivityType.Workout;
             }
@@ -228,7 +244,7 @@ namespace StravaUpload.Lib
 
                 var key = new RangePair(moveStartTime.Value, moveStartTime.Value);
                 var description = CreateDescription(move);
-                var name = move.Notes != null ? move.Notes.Split('.').FirstOrDefault() ?? move.MoveID.ToString() : move.MoveID.ToString();
+                var name = move.Notes != null ? move.Notes.Split('.').FirstOrDefault() ?? move.MoveId.ToString() : move.MoveId.ToString();
 
                 if (activitiesToUpdate.ContainsKey(key))
                 {

@@ -1,7 +1,9 @@
 # Strava upload
 
-Strava Upload is s simple library to synchronize (create, update) activities on **Strava** with other activities. Currently it provides synchronization with **Suunto Movescount** moves that 
-are provided by [**MovescountBackup** library](https://github.com/marazt/movescount-backup).
+Strava Upload is s simple library to synchronize (create, update) activities on **Strava** with other activities. 
+Currently it provides examples for synchronization with:
+- **Suunto Movescount** moves that are provided by [**MovescountBackup** library](https://github.com/marazt/movescount-backup).
+- **Garmin Connect** activities that are provided by [**GarminConnectClient** library](https://github.com/marazt/garmin-connect-client).
  
 ## Version
 
@@ -39,6 +41,8 @@ The solution consists of the following projects:
 
 #### StravaUpload.Console
 
+##### MovescountUploader
+
 - **MovescountAppKey** - App key to be able to query Movescount API.
 - **MovescountUserKey** - User key to be able to query Movescount API.
 - **MovescountUserEmail** - User email to be able to query Movescount API.
@@ -53,6 +57,14 @@ The solution consists of the following projects:
 - **StorageConnectionString** - Connection string to Azure Blob Storage. Required for `CloudStorate`.
 - **ContainerName** - Container name on Azure Blob Storage. Required for `CloudStorate`.
 - **StravaAccessToken** - Strava access token wit write rights.
+
+##### GarminConnectUploader
+
+- **Username** - Garmin Conect username.
+- **Password** - Garmin Conect password.
+- **BackupDir** - Directory where moves should be stored. Required for `FileSystemStorage`.
+- **StorageConnectionString** - Connection string to Azure Blob Storage. Required for `CloudStorate`.
+- **ContainerName** - Container name on Azure Blob Storage. Required for `CloudStorate`.
 
 #### StravaUpload.StravaUploadFunction
 

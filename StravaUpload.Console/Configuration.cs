@@ -2,13 +2,14 @@
 
 namespace StravaUpload.Console
 {
-
     public class Configuration : IConfiguration
     {
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly IConfigurationRoot root;
 
-        public Configuration() { }
+        public Configuration()
+        {
+        }
 
         public Configuration(IConfigurationRoot root)
         {
@@ -18,10 +19,14 @@ namespace StravaUpload.Console
             this.MovescountUserEmail = this.root["AppConfig:MovescountUserEmail"];
             this.MovescountUserKey = this.root["AppConfig:MovescountUserKey"];
             this.MovescountMemberName = this.root["AppConfig:MovescountMemberName"];
-            this.BackupDir = this.root["AppConfig:BackupDir"];
             this.CookieValue = this.root["AppConfig:CookieValue"];
             this.StorageConnectionString = this.root["AppConfig:StorageConnectionString"];
+            this.BackupDir = this.root["AppConfig:BackupDir"];
             this.ContainerName = this.root["AppConfig:ContainerName"];
+            this.GarminConnectClientBackupDir = this.root["AppConfig:GarminConnectClientBackupDir"];
+            this.GarminConnectClientContainerName = this.root["AppConfig:GarminConnectClientContainerName"];
+            this.MovescountBackupBackupDir = this.root["AppConfig:MovescountBackupBackupDir"];
+            this.MovescountBackupContainerName = this.root["AppConfig:MovescountBackupContainerName"];
             this.StravaAccessToken = this.root["AppConfig:StravaAccessToken"];
             this.SendGridApiKey = this.root["AppConfig:SendGridApiKey"];
             this.EmailFrom = this.root["AppConfig:EmailFrom"];
@@ -52,5 +57,16 @@ namespace StravaUpload.Console
 
         public string EmailTo { get; set; }
 
+        public string Username { get; set; }
+
+        public string Password { get; set; }
+
+        public string MovescountBackupBackupDir { get; set; }
+
+        public string MovescountBackupContainerName { get; set; }
+
+        public string GarminConnectClientBackupDir { get; set; }
+
+        public string GarminConnectClientContainerName { get; set; }
     }
 }

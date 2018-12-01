@@ -1,7 +1,7 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.Azure.WebJobs.Host;
+﻿using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StravaUpload.StravaUploadFunction
 {
@@ -37,21 +37,27 @@ namespace StravaUpload.StravaUploadFunction
                 case LogLevel.Information:
                     this.traceWriter.Info(state.ToString());
                     break;
+
                 case LogLevel.Warning:
                     this.traceWriter.Warning(state.ToString());
                     break;
+
                 case LogLevel.Error:
                     this.traceWriter.Error(state.ToString());
                     break;
+
                 case LogLevel.Debug:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 case LogLevel.Critical:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 case LogLevel.Trace:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 default:
                     this.traceWriter.Info(state.ToString());
                     break;
@@ -101,21 +107,27 @@ namespace StravaUpload.StravaUploadFunction
                 case LogLevel.Information:
                     this.traceWriter.Info(state.ToString());
                     break;
+
                 case LogLevel.Warning:
                     this.traceWriter.Warning(state.ToString());
                     break;
+
                 case LogLevel.Error:
                     this.traceWriter.Error(state.ToString());
                     break;
+
                 case LogLevel.Debug:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 case LogLevel.Critical:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 case LogLevel.Trace:
                     this.traceWriter.Verbose(state.ToString());
                     break;
+
                 default:
                     this.traceWriter.Info(state.ToString());
                     break;

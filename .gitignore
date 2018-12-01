@@ -39,3 +39,6 @@ _ReSharper*/
 #Nuget packages folder
 packages/
 local.appsettings.json
+local.settings.json
+StravaUpload.StravaUploadFunction/Properties
+StravaUpload.Console/Properties
