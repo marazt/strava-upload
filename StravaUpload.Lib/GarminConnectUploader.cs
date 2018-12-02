@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using MovescountBackup.Lib.Services;
+﻿using GarminConnectClient.Lib.Services;
+using Microsoft.Extensions.Logging;
 using Strava.Activities;
 using Strava.Authentication;
 using Strava.Clients;
@@ -84,6 +84,9 @@ namespace StravaUpload.Lib
             var notes = new StringBuilder(string.Empty);
             notes.AppendLine("Garmin Connect data:");
             notes.AppendLine($"Activity: https://connect.garmin.com/modern/activity/{activity.ActivityId}");
+            notes.AppendLine($"Activity type: {activity.ActivityType.TypeKey}");
+            notes.AppendLine($"Event type: {activity.EventType.TypeKey}");
+            notes.AppendLine($"Calories: {Math.Round(activity.Summary.Calories)}");
             notes.AppendLine($"Training effect: {Math.Round(activity.Summary.TrainingEffect, 1)}");
             notes.AppendLine($"Average HR: {(activity.Summary.AverageHr)} bps");
             notes.AppendLine($"Location: {activity.LocationName}");
@@ -97,7 +100,7 @@ namespace StravaUpload.Lib
         {
             if (!garminActivities.Any())
             {
-                this.logger.LogInformation("No moves to be processed.");
+                this.logger.LogInformation("No activities to be processed.");
                 return;
             }
 
@@ -122,13 +125,13 @@ namespace StravaUpload.Lib
                 activities = await this.client.Activities.GetActivitiesAsync(page++, 30);
             }
 
-            // Process moves
-            this.logger.LogInformation("Processing moves.");
+            // Process activities
+            this.logger.LogInformation("Processing activities.");
             foreach (var (garminActivity, gpsFile, gpsFormat) in garminActivities)
             {
-                var moveStartTime = garminActivity.Summary.StartTimeGmt.DateTime;
+                var garminActivityStartTime = garminActivity.Summary.StartTimeGmt.DateTime;
 
-                var key = new RangePair(moveStartTime, moveStartTime);
+                var key = new RangePair(garminActivityStartTime, garminActivityStartTime);
                 var description = CreateDescription(garminActivity);
                 var name = garminActivity.ActivityName;
 
@@ -187,7 +190,7 @@ namespace StravaUpload.Lib
                                     this.logger.LogWarning(
                                         $"Empty GPS file {gpsFile} of Garmin Connect ActivityId {garminActivity.ActivityId}. Trying to create new activity.");
                                     await this.client.Activities.CreateActivityAsync(name, activityType,
-                                        moveStartTime, (int)garminActivity.Summary.Duration, description, garminActivity.Summary.Distance);
+                                        garminActivityStartTime, (int)garminActivity.Summary.Duration, description, garminActivity.Summary.Distance);
                                 }
                             }
                             else

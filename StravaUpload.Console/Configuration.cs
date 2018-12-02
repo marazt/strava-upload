@@ -31,6 +31,8 @@ namespace StravaUpload.Console
             this.SendGridApiKey = this.root["AppConfig:SendGridApiKey"];
             this.EmailFrom = this.root["AppConfig:EmailFrom"];
             this.EmailTo = this.root["AppConfig:EmailTo"];
+            this.Username = this.root["AppConfig:Username"];
+            this.Password = this.root["AppConfig:Password"];
         }
 
         public string MovescountAppKey { get; set; }
