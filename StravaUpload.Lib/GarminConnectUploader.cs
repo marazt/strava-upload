@@ -109,9 +109,12 @@ namespace StravaUpload.Lib
 
             // Load Strava activities
             var page = 1;
+            const int maxActivities = 30;
             this.logger.LogInformation("Loading Strava activities.");
-            var activities = await this.client.Activities.GetActivitiesAsync(page++, 30);
-            while (activities.Count > 0)
+            this.logger.LogInformation($"Loading {maxActivities} Strava activities on page {page}.");
+            var activities = await this.client.Activities.GetActivitiesAsync(page++, maxActivities);
+            this.logger.LogInformation($"{activities.Count()} Strava activities loaded.");
+            while (activities.Any() && activitiesToUpdate.Count < maxActivities)
             {
                 foreach (var activity in activities)
                 {
@@ -121,8 +124,9 @@ namespace StravaUpload.Lib
                         activitiesToUpdate.Add(key, activity);
                     }
                 }
-
-                activities = await this.client.Activities.GetActivitiesAsync(page++, 30);
+                this.logger.LogInformation($"Loading {maxActivities} Strava activities on page {page}.");
+                activities = await this.client.Activities.GetActivitiesAsync(page++, maxActivities);
+                this.logger.LogInformation($"{activities.Count()} Strava activities loaded.");
             }
 
             // Process activities
@@ -139,7 +143,7 @@ namespace StravaUpload.Lib
                 {
                     // Update activity
                     var activity = activitiesToUpdate[key];
-                    this.logger.LogInformation($"Activity {activity.Id} found. Updating description.");
+                    this.logger.LogInformation($"Activity {activity.Id} '{activity.Name}' found. Updating description.");
 
                     try
                     {
@@ -148,7 +152,7 @@ namespace StravaUpload.Lib
                     }
                     catch (Exception ex)
                     {
-                        this.logger.LogError($"Error while updating activity {activity.Id}.");
+                        this.logger.LogError($"Error while updating activity {activity.Id} '{activity.Name}'.");
                         this.logger.LogError(ex.Message);
                         this.logger.LogError(ex.StackTrace);
                         throw;
@@ -176,7 +180,7 @@ namespace StravaUpload.Lib
                                     var parts = uploadStatus.Error.Split(' ');
                                     var activityId = parts[parts.Length - 1];
                                     this.logger.LogWarning(
-                                        $"Duplicate activity of Garmin Connect ActivityId {garminActivity.ActivityId} and Strava ActivityId {activityId}. File {gpsFile}.");
+                                        $"Duplicate activity of Garmin Connect ActivityId {garminActivity.ActivityId} '{garminActivity.ActivityName}' and Strava ActivityId {activityId}. File {gpsFile}.");
                                     await this.client.Activities.UpdateActivityAsync(activityId,
                                         ActivityParameter.Description, description);
                                     await this.client.Activities.UpdateActivityAsync(activityId,
@@ -188,17 +192,17 @@ namespace StravaUpload.Lib
                                 else if (uploadStatus.Error.Contains("empty"))
                                 {
                                     this.logger.LogWarning(
-                                        $"Empty GPS file {gpsFile} of Garmin Connect ActivityId {garminActivity.ActivityId}. Trying to create new activity.");
+                                        $"Empty GPS file {gpsFile} of Garmin Connect ActivityId {garminActivity.ActivityId} '{garminActivity.ActivityName}'. Trying to create new activity.");
                                     await this.client.Activities.CreateActivityAsync(name, activityType,
                                         garminActivityStartTime, (int)garminActivity.Summary.Duration, description, garminActivity.Summary.Distance);
                                 }
                             }
                             else
                             {
-                                this.logger.LogWarning($"New activity of Garmin Connect ActivityId {garminActivity.ActivityId} and file {gpsFile} created.");
+                                this.logger.LogWarning($"New activity of Garmin Connect ActivityId {garminActivity.ActivityId} '{garminActivity.ActivityName}' and file {gpsFile} created.");
                                 if (uploadStatus.Id == 0)
                                 {
-                                    this.logger.LogWarning($"Invalid upload status of uploaded Garmin Connect ActivityId {garminActivity.ActivityId}.");
+                                    this.logger.LogWarning($"Invalid upload status of uploaded Garmin Connect ActivityId {garminActivity.ActivityId} '{garminActivity.ActivityName}'.");
                                 }
                                 else
                                 {

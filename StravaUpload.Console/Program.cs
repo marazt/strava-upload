@@ -23,6 +23,7 @@ namespace StravaUpload.Console
 
             await ProcessGarminConnectActivities(configuration, log, mailService);
 
+            log.Information("Done.");
             System.Console.ReadKey();
         }
 
