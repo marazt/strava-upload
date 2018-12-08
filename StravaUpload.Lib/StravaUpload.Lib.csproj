@@ -14,6 +14,10 @@
     <PackageId>StravaUpload</PackageId>
     <Product>StravaUpload</Product>
     <Version>1.0.1</Version>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>F:\Projects\StravaUpload\StravaUpload.Lib\StravaUpload.Lib.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GarminConnectClientNet" Version="1.0.1" />
